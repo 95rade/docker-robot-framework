@@ -16,14 +16,13 @@ ENV SCREEN_WIDTH 1920
 ENV ROBOT_THREADS 1
 
 # Dependency versions
-ENV CHROMIUM_VERSION 78.0
+ENV CHROMIUM_VERSION 77.0
 ENV DATABASE_LIBRARY_VERSION 1.2
 ENV FAKER_VERSION 4.2.0
-ENV FIREFOX_VERSION 70.0
+#ENV FIREFOX_VERSION 70.0
 ENV FTP_LIBRARY_VERSION 1.6
-ENV GECKO_DRIVER_VERSION v0.22.0
-ENV IMAP_LIBRARY_VERSION 0.3.0
-ENV PABOT_VERSION 0.91
+#ENV GECKO_DRIVER_VERSION v0.22.0
+ENV PABOT_VERSION 0.89
 ENV REQUESTS_VERSION 0.6.2
 ENV ROBOT_FRAMEWORK_VERSION 3.1.2
 ENV SELENIUM_LIBRARY_VERSION 4.1.0
@@ -53,7 +52,7 @@ RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositori
   && apk --no-cache add \
     "chromium~$CHROMIUM_VERSION" \
     "chromium-chromedriver~$CHROMIUM_VERSION" \
-    "firefox~$FIREFOX_VERSION" \
+    #"firefox~$FIREFOX_VERSION" \
     xauth \
     "xvfb-run~$XVFB_VERSION" \
   && mv /usr/lib/chromium/chrome /usr/lib/chromium/chrome-original \
@@ -67,7 +66,6 @@ RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositori
     robotframework-databaselibrary==$DATABASE_LIBRARY_VERSION \
     robotframework-faker==$FAKER_VERSION \
     robotframework-ftplibrary==$FTP_LIBRARY_VERSION \
-    robotframework-imaplibrary==$IMAP_LIBRARY_VERSION \
     robotframework-pabot==$PABOT_VERSION \
     robotframework-requests==$REQUESTS_VERSION \
     robotframework-seleniumlibrary==$SELENIUM_LIBRARY_VERSION \
@@ -75,11 +73,13 @@ RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositori
     PyYAML \
 
 # Download Gecko drivers directly from the GitHub repository
-  && wget -q "https://github.com/mozilla/geckodriver/releases/download/$GECKO_DRIVER_VERSION/geckodriver-$GECKO_DRIVER_VERSION-linux64.tar.gz" \
-    && tar xzf geckodriver-$GECKO_DRIVER_VERSION-linux64.tar.gz \
-    && mkdir -p /opt/robotframework/drivers/ \
-    && mv geckodriver /opt/robotframework/drivers/geckodriver \
-    && rm geckodriver-$GECKO_DRIVER_VERSION-linux64.tar.gz \
+# Skipping Gecko drivers
+  #&& wget -q "https://github.com/mozilla/geckodriver/releases/download/$GECKO_DRIVER_VERSION/geckodriver-$GECKO_DRIVER_VERSION-linux64.tar.gz" \
+  #  && tar xzf geckodriver-$GECKO_DRIVER_VERSION-linux64.tar.gz \
+  #  && mkdir -p /opt/robotframework/drivers/ \
+  #  && mv geckodriver /opt/robotframework/drivers/geckodriver \
+  #  && rm geckodriver-$GECKO_DRIVER_VERSION-linux64.tar.gz \
+  && mkdir -p /opt/robotframework/drivers/ \
   && apk del --no-cache --update-cache .build-deps
 
 # Update system path
