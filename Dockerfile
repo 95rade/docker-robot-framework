@@ -1,6 +1,6 @@
 FROM python:3.7-alpine3.10
 
-MAINTAINER Paul Podgorsek <ppodgorsek@users.noreply.github.com>
+MAINTAINER Rade Milijasevic <rmilijasev@cray.com>
 LABEL description Robot Framework in Docker.
 
 # Setup volume for output
