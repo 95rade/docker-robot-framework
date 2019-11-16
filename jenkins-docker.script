@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+
+ls -al && pwd
+docker images
+chmod +x build
+chmod +x run_tests.sh
+ls -al
+./build
+echo "We have image..."
+./run_tests.sh
+echo "Tests executed"
+ls -al   # check if output directory exists.
