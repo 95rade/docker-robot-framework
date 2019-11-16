@@ -33,16 +33,20 @@ As stated by [the official GitHub project](https://github.com/robotframework/Sel
 
 This container can be run using the following command:
 
-    docker run \
-        -v <local path to the reports' folder>:/opt/robotframework/reports:Z \
-        -v <local path to the test suites' folder>:/opt/robotframework/tests:Z \
-        ppodgorsek/robot-framework:<version>
+    # Using Chrome
+    docker run --rm -i \   # --rm remove container after run.
+        -v `pwd`/reports:/opt/robotframework/reports:Z \
+        -v `pwd`/test:/opt/robotframework/tests:Z \
+        -e BROWSER=chrome \
+        --security-opt seccomp:unconfined \
+        --shm-size=512mb \
+        rade/robot-framework:latest
 
 ### Switching browsers
 
 Browsers can be easily switched. It is recommended to define `${BROWSER} %{BROWSER}` in your Robot variables and to use `${BROWSER}` in your test cases. This allows to set the browser in a single place if needed.
 
-When running your tests, simply add `-e BROWSER=chrome` or `-e BROWSER=firefox` to the run command.
+When running your tests, simply add `-e BROWSER=chrome` or `-e BROWSER=firefox` or `-e BROWSER=headlesschrome` to the run command.
 
 ### Changing the container screen's resolution
 
@@ -58,7 +62,7 @@ It is possible to parallelise the execution of your test suites. Simply define t
 
     docker run \
         -e ROBOT_THREADS=4 \
-        ppodgorsek/robot-framework:latest
+        rade/robot-framework:latest
 
 By default, there is no parallelisation.
 
@@ -68,7 +72,7 @@ RobotFramework supports many options such as `--exclude`, `--variable`, `--logle
 
     docker run \
         -e ROBOT_OPTIONS="--loglevel DEBUG" \
-        ppodgorsek/robot-framework:latest
+        rade/robot-framework:latest
 
 ## Testing this project
 
@@ -79,14 +83,14 @@ Not convinced yet? Simple tests have been prepared in the `test/` folder, you ca
         -v `pwd`/reports:/opt/robotframework/reports:Z \
         -v `pwd`/test:/opt/robotframework/tests:Z \
         -e BROWSER=chrome \
-        ppodgorsek/robot-framework:latest
+        rade/robot-framework:latest
 
     # Using Firefox
     docker run \
         -v `pwd`/reports:/opt/robotframework/reports:Z \
         -v `pwd`/test:/opt/robotframework/tests:Z \
         -e BROWSER=firefox \
-        ppodgorsek/robot-framework:latest
+        rade/robot-framework:latest
 
 For Windows users who use **PowerShell**, the commands are slightly different:
 
@@ -95,14 +99,14 @@ For Windows users who use **PowerShell**, the commands are slightly different:
         -v ${PWD}/reports:/opt/robotframework/reports:Z \
         -v ${PWD}/test:/opt/robotframework/tests:Z \
         -e BROWSER=chrome \
-        ppodgorsek/robot-framework:latest
+        rade/robot-framework:latest
 
     # Using Firefox
     docker run \
         -v ${PWD}/reports:/opt/robotframework/reports:Z \
         -v ${PWD}/test:/opt/robotframework/tests:Z \
         -e BROWSER=firefox \
-        ppodgorsek/robot-framework:latest
+        rade/robot-framework:latest
 
 Screenshots of the results will be available in the `reports/` folder.
 
@@ -121,7 +125,7 @@ To avoid this error, please change the shm size when starting the container by a
 
 In case further investigation is required, the logs can be accessed by mounting their folder. Simply add the following parameter to your `run` command:
 
-* Linux/Mac: ``-v `pwd`/logs:/var/log:Z``
+* Linux/Mac: ``-v `pwd`/logs:/var/log:Z``  or `-v $PWD/reports:/var/reports:Z`
 * Windows: ``-v ${PWD}/logs:/var/log:Z``
 
 ### Error: Suite contains no tests
@@ -132,11 +136,11 @@ When running tests, an unexpected error sometimes occurs:
 
 There are two main causes to this:
 * Either the test folder is not the right one,
-* Or the permissions on the test folder/test files are too restrictive.
+* Or the permissions on the test folder /test files are too restrictive.
 
 As there can sometimes be issues as to where the tests are run from, make sure the correct folder is used by trying the following actions:
-* Use a full path to the folder instead of a relative one,
-* Replace any`` `pwd` ``or `${PWD}` by the full path to the folder.
+* Use a full path to the folder instead of a relative path,
+* Replace any `pwd` or ${PWD} or $PWD with the full path to the folder.
 
 It is also important to check if Robot Framework is allowed to access the resources it needs, i.e.:
 * The folder where the tests are located,
