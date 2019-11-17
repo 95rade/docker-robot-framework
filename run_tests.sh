@@ -9,4 +9,4 @@ docker run --rm -i \
     --security-opt seccomp:unconfined \
     --shm-size=512mb \
     rade/robot-framework:latest
-exit 0
+#exit 0
