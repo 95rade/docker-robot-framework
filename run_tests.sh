@@ -1,9 +1,12 @@
 #!/bin/bash
 set -e
 
-# Using Chromium
+# Using Chrome
 docker run --rm -i \
     -v `pwd`/reports:/opt/robotframework/reports:Z \
     -v `pwd`/test:/opt/robotframework/tests:Z \
     -e BROWSER=chrome \
+    --security-opt seccomp:unconfined \
+    --shm-size=512mb \
     rade/robot-framework:latest
+#exit 0
