@@ -1,6 +1,5 @@
 #!/bin/bash
 set -e
-
 # Using Chrome
 docker run --rm -i \
     -v `pwd`/reports:/opt/robotframework/reports:Z \
@@ -9,4 +8,3 @@ docker run --rm -i \
     --security-opt seccomp:unconfined \
     --shm-size=512mb \
     rade/robot-framework:latest
-#exit 0
