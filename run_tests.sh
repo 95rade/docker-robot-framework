@@ -1,5 +1,5 @@
-#!/bin/bash
-set -e
+#!/bin/sh
+set -ex
 # Using Chrome
 docker run --rm -i \
     -v `pwd`/reports:/opt/robotframework/reports:Z \
