@@ -7,4 +7,4 @@ docker run --rm -i \
     -e BROWSER=chrome \
     --security-opt seccomp:unconfined \
     --shm-size=512mb \
-    rade/robot-framework:latest
+    robot-image:latest
