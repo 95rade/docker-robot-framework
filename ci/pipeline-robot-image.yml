@@ -6,7 +6,7 @@ jobs:
   plan:
   - get: docker-robot-framework
     trigger: true
-  - get: 30m-timer
+  #- get: 30m-timer
   - put: robot-image
     params: {build: docker-robot-framework}
 
@@ -18,33 +18,34 @@ jobs:
   - get: docker-robot-framework
     passed: [build-robot-docker-image]
     trigger: true
+  - get: 30m-timer
   - task: run-tests
     image: robot-image
-    params: 
+    params:
         OWNER: rade
     config:
       platform: linux
       inputs:
       - name: docker-robot-framework  # input dir for script is our repo folder
-      run:
-        path: /bin/sh
-        args:
-        #- -exc
-        - -c
-        - |
-            whoami
-            #env
-            pwd
-            ls -al
-            cd docker-robot-framework/test
-            ls -al
-            chmod +x run_tests.sh
-            ls -al
-            ./run_tests.sh
-            
       #run:
-      #  path: tests/run_tests.sh
-      #  args: []
+      #  path: /bin/sh
+      #  args:
+      #  - -exc
+        #- -c
+      #  - |
+      #      whoami
+      #      #env
+      #      pwd
+      #      ls -al
+      #      cd docker-robot-framework
+      #      ls -al
+      #      chmod +x run_tests.sh
+      #      ls -al
+      #      ./run_tests.sh
+
+      run:
+        path: docker-robot-framework/run_tests.sh
+        args: []
 
 
 resources:
