@@ -1,0 +1,18 @@
+---
+platform: linux
+
+#image: docker:///golang#1.4.2-wheezy
+#image:
+#- name: golang/1.9-alpine
+#- tag: latest
+
+image_resource:
+  type: docker-image
+  source: {repository: rade95/robot-imag}
+
+inputs:
+- name: docker-robot-framework
+  path: docker-robot-framework
+
+run:
+  path: docker-robot-framework/run_tests.sh

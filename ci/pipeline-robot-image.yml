@@ -58,7 +58,7 @@ resources:
 - name: docker-robot-framework
   type: git
   source:
-    uri: https://github.com/95rade/docker-robot-framework.git
+    uri: http://github.com/95rade/docker-robot-framework.git
     branch: master
     paths: [Dockerfile]      # find Dockerfile in repo root.
 
