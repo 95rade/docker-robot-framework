@@ -15,4 +15,4 @@ inputs:
   path: docker-robot-framework
 
 run:
-  path: docker-robot-framework/run_tests.sh
+  path: ./docker-robot-framework/run_tests.sh

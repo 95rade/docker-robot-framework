@@ -11,22 +11,13 @@ jobs:
     params: {build: docker-robot-framework}
 
 - name: run-robot-tests
+  public: true
   plan:
-  - get: robot-image
-    passed: [build-robot-docker-image]
-    trigger: true
   - get: docker-robot-framework
     passed: [build-robot-docker-image]
     trigger: true
-  - get: 30m-timer
-  - task: run-tests
-    image: robot-image
-    params:
-        OWNER: rade
-    config:
-      platform: linux
-      inputs:
-      - name: docker-robot-framework  # input dir for script is our repo folder
+  - task: run-robot-tests
+    file: docker-robot-framework/run_tests.yml
       #run:
       #  path: /bin/sh
       #  args:
@@ -43,17 +34,16 @@ jobs:
       #      ls -al
       #      ./run_tests.sh
 
-      run:
-        path: docker-robot-framework/run_tests.sh
-        args: []
+      #run:
+      #  path: docker-robot-framework/run_tests.sh
+      #  args: []
 
 
 resources:
-
-- name: 30m-timer
-  type: time
-  source:
-    interval: 30m
+#- name: 30m-timer
+#  type: time
+#  source:
+#    interval: 30m
 
 - name: docker-robot-framework
   type: git
