@@ -1,5 +1,6 @@
 resources:
 - name: docker-robot-framework
+  trigger: true
   type: git
   source:
     uri: https://github.com/95rade/docker-robot-framework.git
