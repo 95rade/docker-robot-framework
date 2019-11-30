@@ -12,12 +12,14 @@ jobs:
 
 - name: run-robot-tests
   public: true
+  serial: true
   plan:
   - get: docker-robot-framework
-    passed: [build-robot-docker-image]
+    #passed: [build-robot-docker-image]
     trigger: true
   - task: run-robot-tests
-    file: docker-robot-framework/run_tests.yml
+    inputs: docker-robot-framework
+    file: ci/tasks/run_tests.yml
       #run:
       #  path: /bin/sh
       #  args:
@@ -58,4 +60,4 @@ resources:
     username: ((dockerhub-username))
     password: ((dockerhub-password))
     #repository: ((dockerhub-username))/robot-docker-image
-    repository: rade95/robot-image
+    repository: rade95/robot-image     # my robot image in dockerhub
