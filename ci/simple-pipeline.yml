@@ -4,11 +4,16 @@ resources:
   source:
     uri: https://github.com/95rade/docker-robot-framework.git
     branch: master
+- name: robot-image
+  type: docker-image
+  source:
+    repository: rade95/robot-image
 
 jobs:
-- name: run-robot-tests
+- name: run-robot-tests-in-docker-image
   public: true
   plan:
   - get: docker-robot-framework
-  - task: hello-robot
+  - get: robot-image
+  - task: run-robot-tests-in-docker
     file: docker-robot-framework/ci/tasks/run_tests.yml
