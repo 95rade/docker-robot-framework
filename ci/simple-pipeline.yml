@@ -1,0 +1,14 @@
+resources:
+- name: concourse-tutorial
+  type: git
+  source:
+    uri: https://github.com/ruanbekker/concourse-tutorial.git
+    branch: master
+
+jobs:
+- name: run-robot-tests
+  public: true
+  plan:
+  - get: docker-robot-framework
+  - task: hello-robot
+    file: docker-robot-framework/ci/tasks/run_tests.yml
