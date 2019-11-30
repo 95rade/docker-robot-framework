@@ -14,12 +14,13 @@ jobs:
   public: true
   serial: true
   plan:
+  #- get: robot-image
   - get: docker-robot-framework
-    #passed: [build-robot-docker-image]
+    passed: [build-robot-docker-image]
     trigger: true
   - task: run-robot-tests
     inputs: docker-robot-framework
-    file: ci/tasks/run_tests.yml
+    file: docker-robot-framework/ci/tasks/run_tests.yml
       #run:
       #  path: /bin/sh
       #  args:
