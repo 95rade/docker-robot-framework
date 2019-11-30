@@ -14,4 +14,4 @@ inputs:
 - name: docker-robot-framework
 
 run:
-  path: ci/scripts/run_tests.sh
+  path: docker-robot-framework/ci/scripts/run_tests.sh

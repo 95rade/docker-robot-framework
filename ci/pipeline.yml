@@ -2,8 +2,8 @@ resource_types:
   - name: robot-image-cache (npm-cache)
     type: docker-image
     source:
-      #repository: ymedlop/npm-cache-resource
-      repository: rade95/robot-image
+      repository: ymedlop/npm-cache-resource
+      #repository: rade95/robot-image
       tag: latest
 
 resources:
