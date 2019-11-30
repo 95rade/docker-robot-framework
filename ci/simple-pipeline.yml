@@ -1,8 +1,8 @@
 resources:
-- name: concourse-tutorial
+- name: docker-robot-framework
   type: git
   source:
-    uri: https://github.com/ruanbekker/concourse-tutorial.git
+    uri: https://github.com/95rade/docker-robot-framework.git
     branch: master
 
 jobs:
