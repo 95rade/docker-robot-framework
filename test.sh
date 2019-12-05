@@ -3,4 +3,4 @@ set -ex
 echo "Hello-world"
 pwd
 ls -ltr
-robot -version
+robot test/simpletest.robot
