@@ -7,26 +7,28 @@ Library  OperatingSystem
 *** Variables ***
 ${BROWSER}		headlesschrome
 
-Suite Teardown  Delete All Sessions
+#Suite Teardown  Delete All Sessions
 
 *** Test Cases ***
 Get Requests
     [Tags]  get
     Create Session  google  http://www.google.com   ${BROWSER}
-    Create Session  bing  https://www.bing.com   verify=True    ${BROWSER}
+    Create Session  bing  https://www.bing.com   ${BROWSER}   verify=True
     ${resp}=  Get Request  google  /
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Request  bing  /
     Should Be Equal As Strings  ${resp.status_code}  200
+    [Teardown]  Close Browser
 
 Get Requests with Url Parameters
     [Tags]  get
-    Create Session  httpbin     http://httpbin.org  ${BROWSER}
+    Create Session  httpbin     http://httpbin.org    ${BROWSER}
     &{params}=   Create Dictionary   key=value     key2=value2
     ${resp}=     Get Request  httpbin  /get    params=${params}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${jsondata}=  To Json  ${resp.content}
     Should Be Equal     ${jsondata['args']}     ${params}
+    [Teardown]  Close Browser
 
 Get HTTPS & Verify Cert
     [Tags]  get     get-cert
