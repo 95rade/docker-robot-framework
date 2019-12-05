@@ -4,13 +4,16 @@ Library  String
 Library  RequestsLibrary
 Library  OperatingSystem
 
+*** Variables ***
+${BROWSER}		headlesschrome
+
 Suite Teardown  Delete All Sessions
 
 *** Test Cases ***
 Get Requests
     [Tags]  get
-    Create Session  google  http://www.google.com
-    Create Session  bing  https://www.bing.com   verify=True
+    Create Session  google  http://www.google.com   ${BROWSER}
+    Create Session  bing  https://www.bing.com   verify=True    ${BROWSER}
     ${resp}=  Get Request  google  /
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Request  bing  /
@@ -18,7 +21,7 @@ Get Requests
 
 Get Requests with Url Parameters
     [Tags]  get
-    Create Session  httpbin     http://httpbin.org
+    Create Session  httpbin     http://httpbin.org  ${BROWSER}
     &{params}=   Create Dictionary   key=value     key2=value2
     ${resp}=     Get Request  httpbin  /get    params=${params}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -27,32 +30,32 @@ Get Requests with Url Parameters
 
 Get HTTPS & Verify Cert
     [Tags]  get     get-cert
-    Create Session    httpbin    https://httpbin.org   verify=True
+    Create Session    httpbin    https://httpbin.org   verify=True    ${BROWSER}
     ${resp}=  Get Request  httpbin  /get
     Should Be Equal As Strings  ${resp.status_code}  200
 
 Post Request With URL Params
     [Tags]  post
-    Create Session  httpbin  http://httpbin.org
+    Create Session  httpbin  http://httpbin.org   ${BROWSER}
     &{params}=   Create Dictionary   key=value     key2=value2
     ${resp}=  Post Request  httpbin  /post		params=${params}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 Post Request With No Data
     [Tags]  post
-    Create Session  httpbin  http://httpbin.org
-    ${resp}=  Post Request  httpbin  /post  
+    Create Session  httpbin  http://httpbin.org   ${BROWSER}
+    ${resp}=  Post Request  httpbin  /post
     Should Be Equal As Strings  ${resp.status_code}  200
 
 Put Request With No Data
     [Tags]  put
-    Create Session  httpbin  http://httpbin.org
+    Create Session  httpbin  http://httpbin.org   ${BROWSER}
     ${resp}=  Put Request  httpbin  /put
     Should Be Equal As Strings  ${resp.status_code}  200
 
 Post Request With No Dictionary
     [Tags]  post
-    Create Session  httpbin  http://httpbin.org    debug=3
+    Create Session  httpbin  http://httpbin.org    debug=3    ${BROWSER}
     Set Test Variable  ${data}  some content
     ${resp}=  Post Request  httpbin  /post  data=${data}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -60,14 +63,14 @@ Post Request With No Dictionary
 
 Put Request With URL Params
     [Tags]  put
-    Create Session  httpbin  http://httpbin.org
+    Create Session  httpbin  http://httpbin.org     ${BROWSER}
     &{params}=   Create Dictionary   key=value     key2=value2
     ${resp}=  Put Request  httpbin  /put  params=${params}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 Put Request With No Dictionary
     [Tags]  put
-    Create Session  httpbin  http://httpbin.org
+    Create Session  httpbin  http://httpbin.org     ${BROWSER}
     Set Test Variable  ${data}  some content
     ${resp}=  Put Request  httpbin  /put  data=${data}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -75,7 +78,7 @@ Put Request With No Dictionary
 
 Post Requests
     [Tags]  post
-    Create Session  httpbin  http://httpbin.org
+    Create Session  httpbin  http://httpbin.org     ${BROWSER}
     &{data}=  Create Dictionary  name=bulkan  surname=evcimen
     &{headers}=  Create Dictionary  Content-Type=application/x-www-form-urlencoded
     ${resp}=  Post Request  httpbin  /post  data=${data}  headers=${headers}
@@ -84,7 +87,7 @@ Post Requests
 
 Post With Unicode Data
     [Tags]  post
-    Create Session  httpbin  http://httpbin.org    debug=3
+    Create Session  httpbin  http://httpbin.org    debug=3    ${BROWSER}
     &{data}=  Create Dictionary  name=度假村
     &{headers}=  Create Dictionary  Content-Type=application/x-www-form-urlencoded
     ${resp}=  Post Request  httpbin  /post  data=${data}  headers=${headers}
@@ -92,7 +95,7 @@ Post With Unicode Data
 
 Post Request With Unicode Data
     [Tags]  post
-    Create Session  httpbin  http://httpbin.org    debug=3
+    Create Session  httpbin  http://httpbin.org    debug=3    ${BROWSER}
     &{data}=  Create Dictionary  name=度假村
     &{headers}=  Create Dictionary  Content-Type=application/x-www-form-urlencoded
     ${resp}=  Post Request  httpbin  /post  data=${data}  headers=${headers}
@@ -100,7 +103,7 @@ Post Request With Unicode Data
 
 Post Request With Data and File
     [Tags]    post
-    Create Session    httpbin    http://httpbin.org
+    Create Session    httpbin    http://httpbin.org   ${BROWSER}
     &{data}=    Create Dictionary    name=mallikarjunarao    surname=kosuri
     Create File    foobar.txt    content=foobar
     ${file_data}=    Get File    foobar.txt
@@ -110,7 +113,7 @@ Post Request With Data and File
 
 Put Requests
     [Tags]  put
-    Create Session  httpbin  http://httpbin.org
+    Create Session  httpbin  http://httpbin.org     ${BROWSER}
     &{data}=  Create Dictionary  name=bulkan  surname=evcimen
     &{headers}=  Create Dictionary  Content-Type=application/x-www-form-urlencoded
     ${resp}=  Put Request  httpbin  /put  data=${data}  headers=${headers}
@@ -125,27 +128,27 @@ Head Request
 
 Options Request
     [Tags]  options
-    Create Session  httpbin  http://httpbin.org
+    Create Session  httpbin  http://httpbin.org     ${BROWSER}
     ${resp}=  Options Request  httpbin  /headers
     Should Be Equal As Strings  ${resp.status_code}  200
     Dictionary Should Contain Key  ${resp.headers}  allow
 
 Delete Request With URL Params
     [Tags]  delete
-    Create Session  httpbin  http://httpbin.org
+    Create Session  httpbin  http://httpbin.org     ${BROWSER}
     &{params}=   Create Dictionary   key=value     key2=value2
     ${resp}=  Delete Request  httpbin  /delete		${params}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 Delete Request With No Data
     [Tags]  delete
-    Create Session  httpbin  http://httpbin.org
+    Create Session  httpbin  http://httpbin.org     ${BROWSER}
     ${resp}=  Delete Request  httpbin  /delete
     Should Be Equal As Strings  ${resp.status_code}  200
 
 Delete Request With Data
     [Tags]  delete
-    Create Session  httpbin  http://httpbin.org    debug=3
+    Create Session  httpbin  http://httpbin.org    debug=3      ${BROWSER}
     &{data}=  Create Dictionary  name=bulkan  surname=evcimen
     ${resp}=  Delete Request  httpbin  /delete  data=${data}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -155,7 +158,7 @@ Delete Request With Data
 
 Patch Requests
     [Tags]    patch
-    Create Session    httpbin    http://httpbin.org
+    Create Session    httpbin    http://httpbin.org     ${BROWSER}
     &{data}=    Create Dictionary    name=bulkan    surname=evcimen
     &{headers}=    Create Dictionary    Content-Type=application/x-www-form-urlencoded
     ${resp}=    Patch Request    httpbin    /patch    data=${data}    headers=${headers}
@@ -164,7 +167,7 @@ Patch Requests
 
 Get Request With Redirection
     [Tags]  get
-    Create Session  httpbin  http://httpbin.org    debug=3
+    Create Session  httpbin  http://httpbin.org    debug=3     ${BROWSER}
     ${resp}=  Get Request  httpbin  /redirect/1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Request  httpbin  /redirect/1  allow_redirects=${true}
@@ -172,7 +175,7 @@ Get Request With Redirection
 
 Get Request Without Redirection
     [Tags]  get
-    Create Session  httpbin  http://httpbin.org
+    Create Session  httpbin  http://httpbin.org     ${BROWSER}
     ${resp}=  Get Request  httpbin  /redirect/1  allow_redirects=${false}
     ${status}=  Convert To String  ${resp.status_code}
     Should Start With  ${status}  30
@@ -193,7 +196,7 @@ Head Request With Redirection
 
 Head Request Without Redirection
     [Tags]  head
-    Create Session  httpbin  http://httpbin.org
+    Create Session  httpbin  http://httpbin.org     ${BROWSER}
     ${resp}=  Head Request  httpbin  /redirect/1
     ${status}=  Convert To String  ${resp.status_code}
     Should Start With  ${status}  30
@@ -211,14 +214,14 @@ Post Request With Redirection
 
 Post Request Without Redirection
     [Tags]  post
-    Create Session  jigsaw  http://jigsaw.w3.org    debug=3
+    Create Session  jigsaw  http://jigsaw.w3.org    debug=3     ${BROWSER}
     ${resp}=  Post Request  jigsaw  /HTTP/300/302.html  allow_redirects=${false}
     ${status}=  Convert To String  ${resp.status_code}
     Should Start With  ${status}  30
 
 Put Request With Redirection
     [Tags]  put
-    Create Session  jigsaw  http://jigsaw.w3.org    debug=3
+    Create Session  jigsaw  http://jigsaw.w3.org    debug=3     ${BROWSER}
     ${resp}=  Put Request  jigsaw  /HTTP/300/302.html
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Put Request  jigsaw  /HTTP/300/302.html  allow_redirects=${true}
