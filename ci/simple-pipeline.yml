@@ -1,20 +1,31 @@
 resources:
 - name: docker-robot-framework
-  trigger: true
   type: git
   source:
     uri: https://github.com/95rade/docker-robot-framework.git
     branch: master
+
 - name: robot-image
   type: docker-image
   source:
     repository: rade95/robot-image
+    username: ((dockerhub-username))
+    password: ((dockerhub-password))
 
 jobs:
-- name: run-robot-tests-in-docker-image
+- name: Install dependencies
+  plan:
+    - get: docker-robot-framework
+      trigger: true
+    - get: robot-image
+
+- name: robot-test-it!
   public: true
   plan:
-  - get: docker-robot-framework
-  - get: robot-image
-  - task: run-robot-tests-in-docker
-    file: docker-robot-framework/ci/tasks/run_tests.yml
+    - get: docker-robot-framework
+      trigger: true
+      passed: [Install dependencies]
+    - get: robot-image
+      passed: [Install dependencies]
+    - task: run-robot-tests
+    #file: docker-robot-framework/ci/tasks/run_tests.yml

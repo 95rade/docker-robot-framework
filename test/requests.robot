@@ -18,7 +18,7 @@ Get Requests
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Request  bing  /
     Should Be Equal As Strings  ${resp.status_code}  200
-    [Teardown]  Close Browser
+    [Teardown]  Run Keywords    Close Browser
 
 Get Requests with Url Parameters
     [Tags]  get
@@ -28,7 +28,7 @@ Get Requests with Url Parameters
     Should Be Equal As Strings  ${resp.status_code}  200
     ${jsondata}=  To Json  ${resp.content}
     Should Be Equal     ${jsondata['args']}     ${params}
-    [Teardown]  Close Browser
+    [Teardown]  Run Keywords    Close Browser
 
 Get HTTPS & Verify Cert
     [Tags]  get     get-cert
