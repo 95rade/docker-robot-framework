@@ -3,5 +3,4 @@ set -ex
 echo "Hello-world"
 pwd
 ls -ltr
-cd test
-robot
+robot test/simpletest.robot
