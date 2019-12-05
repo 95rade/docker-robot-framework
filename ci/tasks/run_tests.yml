@@ -7,7 +7,9 @@ platform: linux
 image_resource:
   type: docker-image
   source: {repository: rade95/robot-image}
+  tag: latest
 inputs:
 - name: docker-robot-framework
+- name: robot-image
 run:
   path: docker-robot-framework/ci/scripts/run_tests_ci.sh
