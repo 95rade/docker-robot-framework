@@ -2,7 +2,7 @@
 Library			SeleniumLibrary
 
 *** Variables ***
-${BROWSER}		chrome
+${BROWSER}		headlesschrome
 
 *** Test Cases ***
 Visit Baidu
