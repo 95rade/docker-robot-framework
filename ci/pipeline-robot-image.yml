@@ -24,4 +24,3 @@ resources:
     username: ((dockerhub-username))
     password: ((dockerhub-password))
     repository: rade95/new-robot-image
-    #repository: rade95/new-robot-image     # my robot image in dockerhub

@@ -4,7 +4,6 @@ resources:
     type: git
     source: &repo-source
       uri: https://github.com/95rade/docker-robot-framework
-      #uri: https://github.com/do-community/hello_hapi
       branch: master
 
 jobs:

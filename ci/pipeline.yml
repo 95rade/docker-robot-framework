@@ -4,15 +4,34 @@ resources:
     type: git
     source: &repo-source
       uri: https://github.com/95rade/docker-robot-framework
-      #uri: https://github.com/do-community/hello_hapi
       branch: master
+      paths: [Dockerfile]
+  - name: new-robot-image
+    type: docker-image
+    source:
+      username: ((dockerhub-username))
+      password: ((dockerhub-password))
+      repository: rade95/new-robot-image
 
 jobs:
+  - name: build-robot-docker-image
+    public: true
+    serial: true
+    plan:
+    - get: docker-robot-framework
+      trigger: true
+    #- get: 30m-timer
+    - put: new-robot-image
+      params: {build: docker-robot-framework}
+
   - name: run-tests!
     plan:
+      - get: new-robot-image
+        trigger: true
+        passed: [build-robot-docker-image]
       - get: docker-robot-framework
         trigger: true
-        #passed: [Install dependencies]
+        passed: [build-robot-docker-image]
       - task: run-tests
         config:
           platform: linux
@@ -23,14 +42,12 @@ jobs:
               username: ((dockerhub-username))
               password: ((dockerhub-password))
           inputs:
+            - name: new-robot-image
             - name: docker-robot-framework
           run:
             path: /bin/sh
             args:
             - -c
             - |
-              #pwd
-              #ls -ltr
               cd docker-robot-framework
-              #ls -ltr
               ./test.sh
