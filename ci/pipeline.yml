@@ -13,6 +13,18 @@ resources:
       password: ((dockerhub-password))
       repository: rade95/new-robot-image
 
+  - name: slack-alert
+    type: slack-notification
+    source:
+      url: ((slack-webhook))
+
+resource_types:
+  - name: slack-notification
+    type: docker-image
+    source:
+      repository: cfcommunity/slack-notification-resource
+      tag: v1.3.0
+
 jobs:
   - name: build-robot-docker-image
     public: true
@@ -23,6 +35,26 @@ jobs:
     #- get: 30m-timer
     - put: new-robot-image
       params: {build: docker-robot-framework}
+      on_failure:
+        put: slack-alert
+        params:
+          channel: '#general'
+          username: 'homer'
+          icon_emoji: ':concourse:'
+          silent: true
+          text: |
+              *$BUILD_PIPELINE_NAME/$BUILD_JOB_NAME* ($BUILD_NAME) FAILED to build image
+              https://ci.domain.xyz/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+      on_success:
+        put: slack-alert
+        params:
+          channel: '#general'
+          username: 'homer'
+          icon_emoji: ':concourse:'
+          silent: true
+          text: |
+              *$BUILD_PIPELINE_NAME/$BUILD_JOB_NAME* ($BUILD_NAME) SUCCESS - Image has been published
+              https://ci.domain.xyz/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
 
   - name: run-tests!
     plan:
@@ -51,3 +83,24 @@ jobs:
             - |
               cd docker-robot-framework
               ./test.sh
+
+        on_failure:
+          put: slack-alert
+          params:
+            channel: '#general'
+            username: 'homer'
+            icon_emoji: ':concourse:'
+            silent: true
+            text: |
+                  *$BUILD_PIPELINE_NAME/$BUILD_JOB_NAME* ($BUILD_NAME) FAILED to build image
+                  https://ci.domain.xyz/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+        on_success:
+          put: slack-alert
+          params:
+            channel: '#general'
+            username: 'homer'
+            icon_emoji: ':concourse:'
+            silent: true
+            text: |
+                  *$BUILD_PIPELINE_NAME/$BUILD_JOB_NAME* ($BUILD_NAME) SUCCESS - Image has been published
+                  https://ci.domain.xyz/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
