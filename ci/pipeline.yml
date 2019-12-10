@@ -38,9 +38,9 @@ jobs:
       on_failure:
         put: slack-alert
         params:
-          channel: '#general'
-          username: 'homer'
-          icon_emoji: ':concourse:'
+          channel: '#concourse'
+          #username: 'homer'
+          icon_emoji: ':airplane:'
           silent: true
           text: |
               *$BUILD_PIPELINE_NAME/$BUILD_JOB_NAME* ($BUILD_NAME) FAILED to build image
@@ -48,9 +48,9 @@ jobs:
       on_success:
         put: slack-alert
         params:
-          channel: '#general'
-          username: 'homer'
-          icon_emoji: ':concourse:'
+          channel: '#concourse'
+          #username: 'homer'
+          icon_emoji: ':airplane:'
           silent: true
           text: |
               *$BUILD_PIPELINE_NAME/$BUILD_JOB_NAME* ($BUILD_NAME) SUCCESS - Image has been published
@@ -87,9 +87,9 @@ jobs:
         on_failure:
           put: slack-alert
           params:
-            channel: '#general'
-            username: 'homer'
-            icon_emoji: ':concourse:'
+            channel: '#concourse'
+            #username: 'homer'
+            icon_emoji: ':airplane:'
             silent: true
             text: |
                   *$BUILD_PIPELINE_NAME/$BUILD_JOB_NAME* ($BUILD_NAME) FAILED to build image
@@ -97,9 +97,9 @@ jobs:
         on_success:
           put: slack-alert
           params:
-            channel: '#general'
-            username: 'homer'
-            icon_emoji: ':concourse:'
+            channel: '#concourse'
+            #username: 'homer'
+            icon_emoji: ':airplane:'
             silent: true
             text: |
                   *$BUILD_PIPELINE_NAME/$BUILD_JOB_NAME* ($BUILD_NAME) SUCCESS - Image has been published
