@@ -12,6 +12,7 @@ resources:
       username: ((dockerhub-username))
       password: ((dockerhub-password))
       repository: rade95/new-robot-image
+      tag: latest
 
   - name: slack-alert
     type: slack-notification
@@ -70,7 +71,7 @@ jobs:
           image_resource:
             type: docker-image
             source:
-              repository: rade95/robot-image
+              repository: rade95/new-robot-image
               username: ((dockerhub-username))
               password: ((dockerhub-password))
           inputs:
