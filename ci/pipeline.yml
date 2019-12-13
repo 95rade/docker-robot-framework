@@ -2,6 +2,7 @@
 resources:
   - name: docker-robot-framework
     type: git
+    icon: github-circle
     source: &repo-source
       uri: https://github.com/95rade/docker-robot-framework
       branch: master
@@ -12,6 +13,12 @@ resources:
       username: ((dockerhub-username))
       password: ((dockerhub-password))
       repository: rade95/new-robot-image
+
+  - name: 6h-timer
+    type: time
+    icon: clock-outline
+    source:
+      interval: 6h
 
   - name: slack-alert
     type: slack-notification
@@ -26,21 +33,24 @@ resource_types:
       tag: v1.3.0
 
 jobs:
+
   - name: build-robot-docker-image
     public: true
     serial: true
     plan:
     - get: docker-robot-framework
       trigger: true
-    #- get: 30m-timer
+    - get: 6h-timer
     - put: new-robot-image
       params: {build: docker-robot-framework}
       on_failure:
         put: slack-alert
         params:
-          channel: '#general'
-          username: 'homer'
-          icon_emoji: ':concourse:'
+          channel: '#concourse'
+          #username: 'rade'
+          #icon_emoji: ':concourse:'
+          #icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-logo.png
+          icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-ci.png
           silent: true
           text: |
               *$BUILD_PIPELINE_NAME/$BUILD_JOB_NAME* ($BUILD_NAME) FAILED to build image
@@ -48,9 +58,11 @@ jobs:
       on_success:
         put: slack-alert
         params:
-          channel: '#general'
-          username: 'homer'
-          icon_emoji: ':concourse:'
+          channel: '#concourse'
+          #username: 'rade'
+          #icon_emoji: ':concourse:'
+          #icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-logo.png
+          icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-ci.png
           silent: true
           text: |
               *$BUILD_PIPELINE_NAME/$BUILD_JOB_NAME* ($BUILD_NAME) SUCCESS - Image has been published
@@ -87,9 +99,11 @@ jobs:
         on_failure:
           put: slack-alert
           params:
-            channel: '#general'
-            username: 'homer'
-            icon_emoji: ':concourse:'
+            channel: '#concourse'
+            #username: 'rade'
+            #icon_emoji: ':concourse:'
+            #icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-logo.png
+            icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-ci.png
             silent: true
             text: |
                   *$BUILD_PIPELINE_NAME/$BUILD_JOB_NAME* ($BUILD_NAME) FAILED to build image
@@ -97,9 +111,11 @@ jobs:
         on_success:
           put: slack-alert
           params:
-            channel: '#general'
-            username: 'homer'
-            icon_emoji: ':concourse:'
+            channel: '#concourse'
+            #username: 'rade'
+            #icon_emoji: ':concourse:'
+            #icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-logo.png
+            icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-ci.png
             silent: true
             text: |
                   *$BUILD_PIPELINE_NAME/$BUILD_JOB_NAME* ($BUILD_NAME) SUCCESS - Image has been published
