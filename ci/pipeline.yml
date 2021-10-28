@@ -43,7 +43,7 @@ jobs:
     - get: docker-robot-framework
       trigger: true
     - get: timer-6h
-    - put: new-robot-image
+    - put: jdriven-robot-image
       params: {build: docker-robot-framework}
       on_failure:
         put: slack-alert
@@ -74,7 +74,7 @@ jobs:
 
   - name: run-tests
     plan:
-      - get: new-robot-image
+      - get: jdriven-robot-image
         trigger: true
         passed: [build-robot-docker-image]
       - get: docker-robot-framework
@@ -86,7 +86,7 @@ jobs:
           image_resource:
             type: docker-image
             source:
-              repository: rade95/new-robot-image
+              repository: rade95/jdriven-robot-image
               username: ((dockerhub-username))
               password: ((dockerhub-password))
           inputs:
@@ -97,8 +97,8 @@ jobs:
             args:
             - -c
             - |
-              cd docker-robot-framework
-              ./test.sh
+              cd docker-robot-framework/scripts
+              ./run_suite.sh
 
         on_failure:
           put: slack-alert
