@@ -2,12 +2,25 @@
 resources:
   - name: docker-robot-framework
     type: git
+    icon: github-circle
     source: &repo-source
       uri: https://github.com/95rade/docker-robot-framework
       branch: master
 
+  - name: slack-alert
+    type: slack-notification
+    source:
+      url: ((slack-webhook))
+
+resource_types:
+  - name: slack-notification
+    type: docker-image
+    source:
+      repository: cfcommunity/slack-notification-resource
+      tag: v1.3.0
+
 jobs:
-  - name: run-tests!
+  - name: run-tests
     plan:
       - get: docker-robot-framework
         trigger: true
@@ -33,3 +46,31 @@ jobs:
               cd docker-robot-framework
               #ls -ltr
               ./test.sh
+
+    on_failure:
+      put: slack-alert
+      params:
+        channel: '#concourse'
+        #username: 'rade'
+        #icon_emoji: ':concourse:'
+        #icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-logo.png
+        #icon_url: https://binged.it/2Pl9tD5
+        icon_url: https://binged.it/35lbg0u
+        silent: true
+        text: |
+              *$BUILD_PIPELINE_NAME/$BUILD_JOB_NAME* ($BUILD_NAME) FAILED to build image
+              https://ci.domain.xyz/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+
+    on_success:
+      put: slack-alert
+      params:
+        channel: '#concourse'
+        #username: 'rade'
+        #icon_emoji: ':concourse:'
+        #icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-logo.png
+        #icon_url: https://binged.it/2Pl9tD5
+        icon_url: https://binged.it/35lbg0u
+        silent: true
+        text: |
+              *$BUILD_PIPELINE_NAME/$BUILD_JOB_NAME* ($BUILD_NAME) SUCCESS - Image has been published
+              https://ci.domain.xyz/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME

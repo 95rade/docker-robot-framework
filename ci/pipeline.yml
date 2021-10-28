@@ -7,15 +7,16 @@ resources:
       uri: https://github.com/95rade/docker-robot-framework
       branch: master
       paths: [Dockerfile]
-  - name: new-robot-image
+  - name: jdriven-robot-image
     type: docker-image
     source:
       username: ((dockerhub-username))
       password: ((dockerhub-password))
-      repository: rade95/new-robot-image
+      #repository: rade95/new-robot-image
+      repository: rade95/jdriven-robot-image
       tag: latest
 
-  - name: 6h-timer
+  - name: timer-6h
     type: time
     icon: clock-outline
     source:
@@ -41,7 +42,7 @@ jobs:
     plan:
     - get: docker-robot-framework
       trigger: true
-    - get: 6h-timer
+    - get: timer-6h
     - put: new-robot-image
       params: {build: docker-robot-framework}
       on_failure:
@@ -50,26 +51,28 @@ jobs:
           channel: '#concourse'
           #username: 'rade'
           #icon_emoji: ':concourse:'
-          icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-logo.png
-          #icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-ci.png
+          #icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-logo.png
+          #icon_url: https://binged.it/2Pl9tD5
+          icon_url: https://binged.it/35lbg0u
           silent: true
           text: |
               *$BUILD_PIPELINE_NAME/$BUILD_JOB_NAME* ($BUILD_NAME) FAILED to build image
-              https://ci.domain.xyz/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+              https://192.168.1.18:8080/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
       on_success:
         put: slack-alert
         params:
           channel: '#concourse'
           #username: 'rade'
           #icon_emoji: ':concourse:'
-          icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-logo.png
-          #icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-ci.png
+          #icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-logo.png
+          #icon_url: https://binged.it/2Pl9tD5
+          icon_url: https://binged.it/35lbg0u
           silent: true
           text: |
               *$BUILD_PIPELINE_NAME/$BUILD_JOB_NAME* ($BUILD_NAME) SUCCESS - Image has been published
-              https://ci.domain.xyz/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+              https://192.168.1.18:8080/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
 
-  - name: run-tests!
+  - name: run-tests
     plan:
       - get: new-robot-image
         trigger: true
@@ -87,7 +90,7 @@ jobs:
               username: ((dockerhub-username))
               password: ((dockerhub-password))
           inputs:
-            - name: new-robot-image
+            #- name: new-robot-image
             - name: docker-robot-framework
           run:
             path: /bin/sh
@@ -103,8 +106,9 @@ jobs:
             channel: '#concourse'
             #username: 'rade'
             #icon_emoji: ':concourse:'
-            icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-logo.png
-            #icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-ci.png
+            #icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-logo.png
+            #icon_url: https://binged.it/2Pl9tD5
+            icon_url: https://binged.it/35lbg0u
             silent: true
             text: |
                   *$BUILD_PIPELINE_NAME/$BUILD_JOB_NAME* ($BUILD_NAME) FAILED to build image
@@ -115,8 +119,9 @@ jobs:
             channel: '#concourse'
             #username: 'rade'
             #icon_emoji: ':concourse:'
-            icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-logo.png
-            #icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-ci.png
+            #icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-logo.png
+            #icon_url: https://binged.it/2Pl9tD5
+            icon_url: https://binged.it/35lbg0u
             silent: true
             text: |
                   *$BUILD_PIPELINE_NAME/$BUILD_JOB_NAME* ($BUILD_NAME) SUCCESS - Image has been published
