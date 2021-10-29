@@ -4,14 +4,15 @@ set -e
 pwd
 ls -ltr
 which robot
+exit 0
 
 # Run an individual test suite if the TEST_SUITE environmental variable is set.
-if [ -z "$TEST_SUITE" ]; then
-    TEST_SUITE=""
-fi
+#if [ -z "$TEST_SUITE" ]; then
+#    TEST_SUITE=""
+#fi
 
-CMD="robot --console verbose --outputdir -d /reports -s /suites/$TEST_SUITE"
+#CMD="robot --console verbose --outputdir -d /reports -s /suites/$TEST_SUITE"
 
-echo ${CMD}
+#echo ${CMD}
 
-``${CMD}``
+#``${CMD}``
