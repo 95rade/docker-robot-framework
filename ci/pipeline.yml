@@ -97,8 +97,8 @@ jobs:
             args:
             - -c
             - |
-              cd docker-robot-framework/scripts
-              ./run_suite.sh
+              cd docker-robot-framework
+              ./test.sh
 
         on_failure:
           put: slack-alert
